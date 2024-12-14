@@ -5,7 +5,8 @@ Presentación para los proyectos finales de Base de Datos y Progra 1
 
 Materia: Programacion 1 y base de Datos       Fecha: 14/12/24
 Intengrantes del Grupo: Andres Mallea 
-                        Mijael Calleja
+                        Mijael Callejas
+Repositorio previo: https://github.com/Andress-Mallea/Proyecto-Zoologico
 ## El Problema:
 El Problema el cual se nos es planteado nos pone en el papel de un ingeniero de software el cual es nuevo en una empresa en la cual se lee indica que debe modernizar el sistema de heredamiento de esta en base a la utilización de una base de datos relacional y una aplicación hecha en Python. Siendo que este programa debe ser capaz de integrarse a la infraestructura que ella tiene la compañía y abordar las diferentes complejidades que pueden ocurrir durante la migración de datos, pero igual que debe ser poder capaz de interactuar con los datos dentro de las bases de datos las cuales se manejan.
 La primera premisa del problema nos plantea la creación de un programa hecho en Python el cual debe ser capaz de migrar las bases de datos de un manejador de las mismas tal como puede ser el SQL Server a otro manejador de bases de datos cómo puede ser MySQL
