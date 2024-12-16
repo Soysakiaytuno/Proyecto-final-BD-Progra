@@ -4,7 +4,7 @@ import pyodbc
 from codigo.sql_server.obtener_nombres_columnas import obtener_nombres_columnas
 from codigo.sql_server.obtener_registros_Modificar import obtener_registros
 from codigo.sql_server.actualizar_fila import actualizar_fila
-
+from codigo.sql_server.conectar_mysql import *
 # Función para mostrar detalles en Entry widgets
 def mostrar_detalles(record, columnas, entries, scrollable_frame, records):
     for i, col in enumerate(columnas, start=1):
