@@ -2,150 +2,163 @@ from tkinter import *
 from tkinter import messagebox
 import pyodbc
 import mysql.connector
-import codigos.sql_server.BD_sql_server as BD_sql_server
+from codigos.sql_server.prueba_migracion import prueba_migracion
 
-def migrar():
-    # Conexión a MySQL
-    def connect_to_mysql_without_database(host, user, password):
-        return mysql.connector.connect(
-            host=host,
-            user=user,
-            password=password
-        )
 
-    def connect_to_mysql_with_database(host, database, user, password):
-        return mysql.connector.connect(
-            host=host,
-            database=database,
-            user=user,
-            password=password
-        )
+# Conexión a MySQL
+def connect_to_mysql_without_database(host, user, password):
+    return mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password
+    )
 
-    # Extraer estructura del SQL Server
-    def fetch_data_from_sql_server(cursor, table):
-        cursor.execute(f"SELECT * FROM [{table}]")
-        columns = [column[0] for column in cursor.description]
-        columns = [col.replace('.', '') for col in columns]
-        columns = [col.replace(' ', '') for col in columns]
-        data = cursor.fetchall()
-        data = [tuple(item.strip() if isinstance(item, str) else item for item in row) for row in data]  # Eliminar espacios en blanco de cada elemento
-        return columns, data
+def connect_to_mysql_with_database(host, database, user, password):
+    return mysql.connector.connect(
+        host=host,
+        database=database,
+        user=user,
+        password=password
+    )
 
-    def create_mysql_table(mysql_cursor, table_name, columns):
-        # Cambiar a `BLOB` para la columna `definition` si causa problemas
-        columns_definitions = ", ".join([f"`{col}` BLOB" if col == 'definition' else f"`{col}` TEXT CHARACTER SET utf8mb4" for col in columns])
-        create_table_query = f"CREATE TABLE IF NOT EXISTS `{table_name}` ({columns_definitions})"
-        mysql_cursor.execute(create_table_query)
+# Extraer estructura del SQL Server
+def fetch_data_from_sql_server(cursor, table):
+    cursor.execute(f"SELECT * FROM [{table}]")
+    columns = [column[0] for column in cursor.description]
+    columns = [col.replace('.', '') for col in columns]
+    columns = [col.replace(' ', '') for col in columns]
+    data = cursor.fetchall()
+    data = [tuple(item.strip() if isinstance(item, str) else item for item in row) for row in data]  # Eliminar espacios en blanco de cada elemento
+    return columns, data
 
-    # Insertar datos en MySQL
-    def insert_data_into_mysql(mysql_cursor, table_name, columns, data):
-        placeholders = ", ".join(["%s"] * len(columns))
-        insert_query = f"INSERT INTO `{table_name}` ({', '.join(columns)}) VALUES ({placeholders})"
-        mysql_cursor.executemany(insert_query, data)
+# Crear tabla en MySQL
+def create_mysql_table(mysql_cursor, table_name, columns):
+    columns_definitions = ", ".join([f"`{col}` BLOB" if col == 'definition' else f"`{col}` TEXT CHARACTER SET utf8mb4" for col in columns])
+    create_table_query = f"CREATE TABLE IF NOT EXISTS `{table_name}` ({columns_definitions})"
+    mysql_cursor.execute(create_table_query)
 
-    # Proceso de migración
-    def migrate_data(mysql_config, table_name):
-        try:
-            # Usar la conexión global `mydb` de `BD_sql_server`
-            sql_server_conn = BD_sql_server.mydb
-            sql_server_cursor = sql_server_conn.cursor()
-    
-            # Conectar a MySQL
-            mysql_conn = connect_to_mysql_with_database(**mysql_config)
-            mysql_cursor = mysql_conn.cursor()
-    
-            # Obtener datos de SQL Server
-            columns, data = fetch_data_from_sql_server(sql_server_cursor, table_name)
-    
-            # Crear tabla en MySQL
-            create_mysql_table(mysql_cursor, table_name, columns)
-    
-            # Insertar datos en MySQL
-            insert_data_into_mysql(mysql_cursor, table_name, columns, data)
-    
-            # Confirmar cambios
-            mysql_conn.commit()
-            print(f"Tabla `{table_name}` migrada exitosamente.")
-    
-            sql_server_cursor.close()
-            mysql_cursor.close()
-            mysql_conn.close()
-        except Exception as e:
-            messagebox.showerror("Error", f"Error durante la migración: {e}")
+# Insertar datos en MySQL
+def insert_data_into_mysql(mysql_cursor, table_name, columns, data):
+    placeholders = ", ".join(["%s"] * len(columns))
+    insert_query = f"INSERT INTO `{table_name}` ({', '.join(columns)}) VALUES ({placeholders})"
+    mysql_cursor.executemany(insert_query, data)
 
-    def fetch_tables_names_from_sql_server(cursor):
-        cursor.execute("SELECT name FROM sys.tables;")
-        tablas = cursor.fetchall()
-        # Filtrar la tabla sysdiagrams
-        tables_names = [tabla[0] for tabla in tablas if 'sysdiagrams' not in tabla[0].lower()]
-        return tables_names
 
-    def on_submit():
-        mysql_host = mysql_host_entry.get()
-        mysql_user = mysql_user_entry.get()
-        mysql_password = mysql_password_entry.get()
-        sql_server_database = sql_server_database_entry.get()
+# Proceso de migración
+def migrate_data(mysql_config, table_name, db_manager):
+    try:
+        # Usar la conexión de la instancia db_manager
+        sql_server_conn = db_manager.mydb
+        sql_server_cursor = sql_server_conn.cursor()
 
-        mysql_config_without_db = {
-            "host": mysql_host,
-            "user": mysql_user,
-            "password": mysql_password
-        }
 
-        mysql_config_with_db = {
-            "host": mysql_host,
-            "database": sql_server_database,
-            "user": mysql_user,
-            "password": mysql_password
-        }
+        # Conectar a MySQL
+        mysql_conn = connect_to_mysql_with_database(**mysql_config)
+        mysql_cursor = mysql_conn.cursor()
 
-        try:
-            # Usar la conexión global `mydb` de `BD_sql_server`
-            sql_server_conn = BD_sql_server.mydb
-            sql_server_cursor = sql_server_conn.cursor()
-    
-            # Conectar a MySQL
-            mysql_conn = connect_to_mysql_without_database(**mysql_config_without_db)
-            mysql_cursor = mysql_conn.cursor()
-    
-            # Crear base de datos en MySQL
-            mysql_cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{sql_server_database}`")
-            mysql_cursor.close()
-            mysql_conn.close()
-    
-            tables_names = fetch_tables_names_from_sql_server(sql_server_cursor)
-    
-            # Desactivar verificaciones de claves foráneas antes de la migración
-            mysql_conn = connect_to_mysql_with_database(**mysql_config_with_db)
-            mysql_cursor = mysql_conn.cursor()
-            mysql_cursor.execute("SET foreign_key_checks = 0;")
-            mysql_cursor.close()
-            mysql_conn.close()
-    
-            # Migrar las tablas en el orden correcto
-            for table_name in tables_names:
-                migrate_data(mysql_config_with_db, table_name)
-    
-            # Reactivar verificaciones de claves foráneas después de la migración
-            mysql_conn = connect_to_mysql_with_database(**mysql_config_with_db)
-            mysql_cursor = mysql_conn.cursor()
-            mysql_cursor.execute("SET foreign_key_checks = 1;")
-            mysql_cursor.close()
-            mysql_conn.close()
-    
-            sql_server_cursor.close()
-    
-            messagebox.showinfo("Éxito", "Migración completada exitosamente.")
-            root.destroy()
-        except Exception as e:
-            messagebox.showerror("Error", f"Error durante la migración: {e}")
+        # Obtener datos de SQL Server
+        columns, data = fetch_data_from_sql_server(sql_server_cursor, table_name)
 
-    def mostrar_password():
-        if mysql_password_entry.cget('show') == '':
-            mysql_password_entry.config(show='*')
+        # Crear tabla en MySQL
+        create_mysql_table(mysql_cursor, table_name, columns)
+
+        # Insertar datos en MySQL
+        insert_data_into_mysql(mysql_cursor, table_name, columns, data)
+
+        # Confirmar cambios
+        mysql_conn.commit()
+        print(f"Tabla `{table_name}` migrada exitosamente.")
+
+        # Verificar integridad de datos
+        if prueba_migracion(sql_server_conn, mysql_conn, table_name):
+            messagebox.showinfo("Éxito", f"Tabla `{table_name}` migrada correctamente.")
         else:
-            mysql_password_entry.config(show='')
+            messagebox.showerror("Error", f"Pérdida de datos en la tabla `{table_name}` durante la migración.")
 
+        sql_server_cursor.close()
+        mysql_cursor.close()
+        mysql_conn.close()
+    except Exception as e:
+        messagebox.showerror("Error", f"Error durante la migración: {e}")
+
+# Obtener nombres de tablas desde SQL Server
+def fetch_tables_names_from_sql_server(cursor):
+    cursor.execute("SELECT name FROM sys.tables;")
+    tablas = cursor.fetchall()
+    tables_names = [tabla[0] for tabla in tablas if 'sysdiagrams' not in tabla[0].lower()]
+    return tables_names
+
+# Manejo del envío del formulario
+def on_submit(mysql_host_entry, mysql_user_entry, mysql_password_entry, sql_server_database_entry, root, db_manager):
+    mysql_host = mysql_host_entry.get()
+    mysql_user = mysql_user_entry.get()
+    mysql_password = mysql_password_entry.get()
+    sql_server_database = sql_server_database_entry.get()
+
+    mysql_config_without_db = {
+        "host": mysql_host,
+        "user": mysql_user,
+        "password": mysql_password
+    }
+
+    mysql_config_with_db = {
+        "host": mysql_host,
+        "database": sql_server_database,
+        "user": mysql_user,
+        "password": mysql_password
+    }
+
+    try:
+        sql_server_conn = db_manager.mydb
+        sql_server_cursor = sql_server_conn.cursor()
+
+
+        # Conectar a MySQL
+        mysql_conn = connect_to_mysql_without_database(**mysql_config_without_db)
+        mysql_cursor = mysql_conn.cursor()
+
+        # Crear base de datos en MySQL
+        mysql_cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{sql_server_database}`")
+        mysql_cursor.close()
+        mysql_conn.close()
+
+        tables_names = fetch_tables_names_from_sql_server(sql_server_cursor)
+
+        # Desactivar verificaciones de claves foráneas antes de la migración
+        mysql_conn = connect_to_mysql_with_database(**mysql_config_with_db)
+        mysql_cursor = mysql_conn.cursor()
+        mysql_cursor.execute("SET foreign_key_checks = 0;")
+        mysql_cursor.close()
+        mysql_conn.close()
+
+        # Migrar las tablas en el orden correcto
+        for table_name in tables_names:
+            migrate_data(mysql_config_with_db, table_name, db_manager)
+
+
+        # Reactivar verificaciones de claves foráneas después de la migración
+        mysql_conn = connect_to_mysql_with_database(**mysql_config_with_db)
+        mysql_cursor = mysql_conn.cursor()
+        mysql_cursor.execute("SET foreign_key_checks = 1;")
+        mysql_cursor.close()
+        mysql_conn.close()
+
+        sql_server_cursor.close()
+
+        messagebox.showinfo("Éxito", "Migración completada exitosamente.")
+        root.destroy()
+    except Exception as e:
+        messagebox.showerror("Error", f"Error durante la migración: {e}")
+
+# Mostrar u ocultar contraseña
+def mostrar_password(mysql_password_entry):
+    if mysql_password_entry.cget('show') == '':
+        mysql_password_entry.config(show='*')
+    else:
+        mysql_password_entry.config(show='')
+
+# Función principal para la migración de base de datos
+def migrar(db_manager):
     # Interfaz gráfica de usuario
     root = Tk()
     root.title("Migración de Base de Datos")
@@ -169,12 +182,12 @@ def migrar():
     mysql_password_entry = Entry(root, show="*")
     mysql_password_entry.grid(row=3, column=1, padx=10, pady=10)
 
-    # Cargar la imagen del ojo y configurar el botón para mostrar/ocultar contraseña")
-    toggle_button = Button(root, text="Mostrar", command=mostrar_password)
+    # Cargar la imagen del ojo y configurar el botón para mostrar/ocultar contraseña
+    toggle_button = Button(root, text="Mostrar", command=lambda: mostrar_password(mysql_password_entry))
     toggle_button.grid(row=3, column=2, padx=10, pady=10)
 
     # Botón de envío
-    submit_button = Button(root, text="Migrar", command=on_submit)
+    submit_button = Button(root, text="Migrar", command=lambda: on_submit(mysql_host_entry, mysql_user_entry, mysql_password_entry, sql_server_database_entry, root, db_manager))
     submit_button.grid(row=4, columnspan=2, pady=20)
 
     root.mainloop()

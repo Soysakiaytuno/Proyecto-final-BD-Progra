@@ -2,38 +2,51 @@ from tkinter import *
 from tkinter import messagebox
 import mysql.connector
 
-# Función para obtener nombres de columnas de la tabla
+# Función para obtener nombres de columnas de la tabla, excluyendo ModifiedDate
 def obtener_nombres_columnas(mydb, table_name):
     cursor = mydb.cursor()
     cursor.execute(f"""
         SELECT COLUMN_NAME 
         FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '{table_name}';
+        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '{table_name}' AND COLUMN_NAME != 'ModifiedDate';
     """)
     columnas = cursor.fetchall()
     nombres_columnas = [columna[0] for columna in columnas]
     return nombres_columnas
 
-# Función para mostrar la ventana y actualizar un registro
-def final_show(mydb, table_name):
-    def actualizar_fila():
-        fila_id = var.get()
-        if fila_id is not None:
-            try:
-                valores = [entries[col].get() for col in columnas]
-                set_clause = ', '.join([f"`{col}` = %s" for col in columnas])
-                query = f"UPDATE `{table_name}` SET {set_clause} WHERE `{id_column}` = %s"
-                valores.append(fila_id)
-                cursor = mydb.cursor()
-                cursor.execute(query, valores)
-                mydb.commit()
-                messagebox.showinfo("Éxito", "Registro actualizado exitosamente")
-                the_show.destroy()
-            except Exception as ex:
-                messagebox.showerror("ERROR", f"El error es: \n{ex}")
-        else:
-            messagebox.showerror("ERROR", "Seleccione una fila para actualizar")
+# Función para actualizar un registro
+def actualizar_fila(var, entries, columnas, table_name, id_column, mydb, the_show):
+    fila_id = var.get()
+    if fila_id is not None:
+        try:
+            valores = [entries[col].get() for col in columnas]
+            set_clause = ', '.join([f"`{col}` = %s" for col in columnas] + ["`ModifiedDate` = CURRENT_DATE()"])
+            query = f"UPDATE `{table_name}` SET {set_clause} WHERE `{id_column}` = %s"
+            valores.append(fila_id)
+            cursor = mydb.cursor()
+            cursor.execute(query, valores)
+            mydb.commit()
+            messagebox.showinfo("Éxito", "Registro actualizado exitosamente")
+            the_show.destroy()
+        except Exception as ex:
+            messagebox.showerror("ERROR", f"El error es: \n{ex}")
+    else:
+        messagebox.showerror("ERROR", "Seleccione una fila para actualizar")
 
+# Función para mostrar detalles en Entry widgets
+def mostrar_detalles(record, columnas, entries, scrollable_frame, records):
+    for i, col in enumerate(columnas, start=1):
+        if col not in entries:
+            label = Label(scrollable_frame, text=col)
+            label.grid(row=len(records) + i, column=0, padx=10, pady=5)
+            entry = Entry(scrollable_frame)
+            entry.grid(row=len(records) + i, column=1, padx=10, pady=5)
+            entries[col] = entry
+        entries[col].delete(0, END)
+        entries[col].insert(0, record[i-1])
+
+# Función para mostrar la ventana y actualizar un registro
+def modificar(mydb, table_name):
     cursor = mydb.cursor()
     cursor.execute(f"SELECT * FROM `{table_name}`;")
     records = cursor.fetchall()
@@ -71,27 +84,20 @@ def final_show(mydb, table_name):
     
     # Mostrar registros con Radiobutton para seleccionar la fila a actualizar
     var = IntVar()
-    for i, record in enumerate(records, start=1):
-        Radiobutton(scrollable_frame, text=record, variable=var, value=record[0], command=lambda r=record: mostrar_detalles(r)).grid(row=i, column=0, padx=10, pady=5)
-    
-    # Diccionario para almacenar los Entry widgets
     entries = {}
 
-    # Función para mostrar los detalles en Entry widgets
-    def mostrar_detalles(record):
-        for i, col in enumerate(columnas, start=1):
-            if col not in entries:
-                label = Label(scrollable_frame, text=col)
-                label.grid(row=len(records) + i, column=0, padx=10, pady=5)
-                entry = Entry(scrollable_frame)
-                entry.grid(row=len(records) + i, column=1, padx=10, pady=5)
-                entries[col] = entry
-            entries[col].delete(0, END)
-            entries[col].insert(0, record[i-1])
+    for i, record in enumerate(records, start=1):
+        Radiobutton(scrollable_frame, text=record, variable=var, value=record[0], command=lambda r=record: mostrar_detalles(r, columnas, entries, scrollable_frame, records)).grid(row=i, column=0, padx=10, pady=5)
 
     # Botón para confirmar la actualización
-    Button(scrollable_frame, text="Actualizar", command=actualizar_fila).grid(row=len(records)+len(columnas)+1, column=0, padx=10, pady=10)
+    Button(scrollable_frame, text="Actualizar", command=lambda: actualizar_fila(var, entries, columnas, table_name, id_column, mydb, the_show)).grid(row=len(records)+len(columnas)+1, column=0, padx=10, pady=10)
     Button(scrollable_frame, text="Cancelar", command=the_show.destroy).grid(row=len(records)+len(columnas)+1, column=1, padx=10, pady=10)
+
+# Función para confirmar la selección de la tabla
+def confirmacion(select_show, table_var, mydb):
+    table_name = table_var.get()
+    select_show.destroy()
+    modificar(mydb, table_name)
 
 # Función principal para modificar registro
 def modify(mydb): 
@@ -99,11 +105,6 @@ def modify(mydb):
         select_show = Toplevel()
         select_show.title("Base de datos god")
         select_show.iconbitmap("codigos/assets/BDICON.ico")
-
-        def confirmacion():
-            table_name = table_var.get()
-            select_show.destroy()
-            final_show(mydb, table_name)
         
         mycursor = mydb.cursor()
         mycursor.execute("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_TYPE = 'BASE TABLE';")
@@ -119,7 +120,7 @@ def modify(mydb):
         for table in tables:
             Radiobutton(select_show, text=table, variable=table_var, value=table).pack(anchor=W)
         
-        Button(select_show, text="Confirmar", command=confirmacion).pack()
-        
+        Button(select_show, text="Confirmar", command=lambda: confirmacion(select_show, table_var, mydb)).pack()
+    
     except Exception as ex:
         messagebox.showerror("ERROR", f"El error es: \n{ex}")

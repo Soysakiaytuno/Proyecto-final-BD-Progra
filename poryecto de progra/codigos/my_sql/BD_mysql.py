@@ -5,38 +5,52 @@ import codigos.my_sql.add_mysql as add_mysql
 import codigos.my_sql.del_mysql as del_mysql
 import codigos.my_sql.modificar_mysql as modificar_mysql
 import codigos.my_sql.show_mysql as show_mysql
+import codigos.my_sql.migrar_mysql_to_sqls as migrar_mysql_to_sqls
 from playsound import *
-#conectas con la base de datos
-def exit():
-    mydb.close()
-def conecion(user, password, database):
-    try:
-        global mydb
-        mydb = mysql.connector.connect(
-            host="localhost",
-            user=user,
-            password=password,
-            database=database,
-            port="3306"
-        )
-        messagebox.showinfo("Conexion Mysql","Conexion exitosa!")
 
-    except Error as e:
-        messagebox.showerror("Error",f"El Error es: \n{e}")
+class MySQLManager:
+    def __init__(self):
+        self.mydb = None
 
-#llama a las diferentes funciones
-def add():
-    playsound("codigos/assets/Select.wav")
-    add_mysql.add(mydb)
-def show():
-    playsound("codigos/assets/Select.wav")
-    show_mysql.show(mydb)
-def delete():
-    playsound("codigos/assets/Select.wav")
-    del_mysql.delete(mydb)
-def mod():
-    playsound("codigos/assets/Select.wav")
-    modificar_mysql.modify(mydb)
-def mysql_to_sqls():
-    playsound("codigos/assets/Select.wav")
-    pass
+    def exit(self):
+        if self.mydb:
+            self.mydb.close()
+
+    def conexion(self, user, password, database):
+        try:
+            self.mydb = mysql.connector.connect(
+                host="localhost",
+                user=user,
+                password=password,
+                database=database,
+                port="3306"
+            )
+            messagebox.showinfo("Conexion Mysql", "Conexion exitosa!")
+        except Error as e:
+            messagebox.showerror("Error", f"El Error es: \n{e}")
+
+    def add(self):
+        playsound("codigos/assets/Select.wav")
+        add_mysql.add(self.mydb)
+
+    def show(self):
+        playsound("codigos/assets/Select.wav")
+        show_mysql.show(self.mydb)
+
+    def delete(self):
+        playsound("codigos/assets/Select.wav")
+        del_mysql.delete(self.mydb)
+
+    def mod(self):
+        playsound("codigos/assets/Select.wav")
+        modificar_mysql.modify(self.mydb)
+
+    def mysql_to_sqls(self):
+        playsound("codigos/assets/Select.wav")
+        migrar_mysql_to_sqls.migrar()
+
+# Crear una instancia de la clase MySQLManager
+db_manager = MySQLManager()
+
+
+
