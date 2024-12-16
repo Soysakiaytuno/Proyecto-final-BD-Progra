@@ -64,5 +64,6 @@ Agregar. - seleccionas la tabla en la cual quieres agregar valores, y te muestra
 Eliminar. - seleccionas de que tabla quieres eliminar, y luego seleccionas la fila que quieres eliminar
 Modificar. - seleccionas la tabla, y te muestra sus filas, seleccionas la que quieras modificar, y posteriormente te abre un menú donde puedes modificar sus valores
 Migración. - esta función consiste en base a la base de datos la la cual ha sido introducida al iniciar el programa está procede a migrarse dependiendo de en qué base de datos esté si está en SQL server se migrará a MySQL en caso de estar en una base de datos que se encuentra en MySQL se migrará SQL server
+Si existe errores al ejecutar, mande la carpeta de proyecto progra 1 al escritorio
 ## Diagramas
 A continuación los diferentes diagramas de las funciones las cuales fueron detalladas anteriormente
