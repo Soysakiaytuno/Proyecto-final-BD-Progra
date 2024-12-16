@@ -31,6 +31,10 @@ Ejemplos de bases de datos relacionales incluyen:
 •	Microsoft SQL Server
 •	Oracle
 •	IBM DB2
+### Modelo de Base de datos relacional
+![](disenobdfinal.png)
+
+=======
 Además de esto también necesitamos saber ¿Qué es una aplicación?
 ## ¿Qué es una aplicación?
 Una aplicación, comúnmente abreviada como “app”, es un programa de software diseñado para realizar una función determinada directamente para el usuario. Es un conjunto de pasos lógicos escritos en un lenguaje de programación que permite realizar tareas a un usuario, sin que este vea todo lo que está detrás, ya que su interacción con la aplicación se da a través de una interfaz visual.
@@ -47,23 +51,147 @@ La interfaz puede tener diferentes formas y modalidades, según el contexto en q
 •	Física: La interfaz puede ser un puerto, un conector, un cable o un dispositivo que permite la transferencia de señales entre los dos extremos.
 •	Funcional: La interfaz define cómo se comunican los dos sistemas o dispositivos, estableciendo un conjunto de reglas y protocolos para la interacción.
 •	Lógica: La interfaz puede ser lógica, es decir, se basa en la representación de objetos, iconos y elementos gráficos que simbolizan acciones o tareas que el usuario puede realizar.
+
 ## Estructura del repositorio:
 Es repositorio el cual hemos utilizado para la elaboración de este programa está estructurado de la siguiente manera dentro del mismo se puede encontrar un Readme en ese detalle la documentación del proyecto la base de datos las cuales se ha creado desde cero al igual que un respaldo de la misma y una carpeta llamada proyecto de programa.
 Dentro de esta carpeta llamada proyecto programa podemos encontrar el main del programa al igual que un ejecutable del mismo y la carpeta llamada códigos donde se encuentran los diferentes archivos que componen el programa.
 Dentro de la carpeta códigos podemos encontrar los archivos de música.py y principal menú.py Al igual que también se puede encontrar cuatro carpetas una siendo _pycache_, otra siendo assets donde se guardan la mayoría de archivos multimedia los cuales se utilizaron para la creación de la interfaz, la otra carpeta sería my_sql donde se encuentran las funciones encargadas de interactuar con las bases de datos relacionales encontradas dentro de my_sql al igual que el código que se utiliza para migrar de y MySQL a SQL Server y por último está la carpeta sql_server donde se encuentran las funciones las cuales interactúan con el SQL server y la migración de SQL server a MySQL
-a continuación, una descripción de las funciones encontrar dentro de los diferentes archivos en el git hub
-main. - llama al menú principal para empezar el programa
-Principal menú. - Te muestra una ventana donde, puedes seleccionar entre 2 tipos de base de datos, SQL server y MySQL
-Música. - reproduce música en bucle de la carpeta assets
-De aquí la interpretación del código puede funcionar tanto en SQL server como en MySQL
-Inicio sesión. - En caso de seleccionar SQL server, te pide driver, server y la base de datos en la que vas a trabajar, caso contrario en MySQL, te pide usuario contraseña y la base de datos en la que trabajar, hay un botón extra, y un botón donde puedes ocultar y mostrar la contraseña
-Conexión. - con los datos recibidos del inicio de sesión, conecta con la base de datos 
-Menú. - abre un menú principal, donde puedes escoger entre las distintas funcionalidades del programa, agregar, modificar, eliminar, mostrar y migrar
-Mostrar. - primero seleccionas que tabla quieres ver y te muestra todos sus detalles
-Agregar. - seleccionas la tabla en la cual quieres agregar valores, y te muestra los valores que debes agregar para aumentar una fila
-Eliminar. - seleccionas de que tabla quieres eliminar, y luego seleccionas la fila que quieres eliminar
-Modificar. - seleccionas la tabla, y te muestra sus filas, seleccionas la que quieras modificar, y posteriormente te abre un menú donde puedes modificar sus valores
-Migración. - esta función consiste en base a la base de datos la la cual ha sido introducida al iniciar el programa está procede a migrarse dependiendo de en qué base de datos esté si está en SQL server se migrará a MySQL en caso de estar en una base de datos que se encuentra en MySQL se migrará SQL server
-Si existe errores al ejecutar, mande la carpeta de proyecto progra 1 al escritorio
-## Diagramas
-A continuación los diferentes diagramas de las funciones las cuales fueron detalladas anteriormente
+a continuación, una descripción de las funciones encontrar dentro de los diferentes archivos en el git hub.  
+
+## main 
+Llama al menú principal para empezar el programa.  
+Diagrama de main:  
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagrama_Main.png))  
+## Principal menú  
+Te muestra una ventana donde, puedes seleccionar entre 2 tipos de base de datos, SQL server y MySQL.
+Diagrama de Principal Menu:  
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Principal_Menu_Diagraams/Menu_principal_general.png)   
+Estas funcion es compuesta por cuatro funciones, estas funciones son:   
+### Abrir_MySQL
+Esta funcion hace un inicio de sesion en el MySQL dentro de la computadora  
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Principal_Menu_Diagraams/Abrir_MySQL.png)  
+### Abrir_sql
+Esta funcion hace un inicio de sesion en el SQL Server dentro de la computadora  
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Principal_Menu_Diagraams/Abrir_sql.png)  
+### Menu_inicio
+Esta Funcion abre una ventana con dos votones los cuales al ser presionados Conenectan con el Sql server o Mysql  
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Principal_Menu_Diagraams/Menu_inicio.png)  
+## Música
+Reproduce música en bucle de la carpeta assets.  
+Diagrama de Musica  
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagrmas%20de%20Musica/Musica_general.png)  
+Estas funcion es compuesta por dos funciones, estas funciones son:  
+### Musica
+Con la entrada de la ruta de la pista de sonido a tocar esta reporoduce la pista introducida  
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagrmas%20de%20Musica/Music.png)  
+### Detener
+Esta Funcion Detiene la pista de musica que estaba jugando  
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagrmas%20de%20Musica/detenermusica.png)  
+De aquí la interpretación del código puede funcionar tanto en SQL server como en MySQL.  
+## Inicio sesión
+En caso de seleccionar SQL server, te pide driver, server y la base de datos en la que vas a trabajar, caso contrario en MySQL, te pide usuario contraseña y la base de datos en la que trabajar, hay un botón extra, y un botón donde puedes ocultar y mostrar la contraseña.  
+Diagrama de Inicio sesión  
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20Inicio%20de%20sesion/Inicio_de_sesion_general.png)  
+Estas funcion es compuesta por cinco funciones, estas funciones son:  
+### Sonidito
+Esta funcion toca una pista musical al abrir el menu de inicio de sesion
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20Inicio%20de%20sesion/Sonido.png)  
+### conectar
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20Inicio%20de%20sesion/Conectar.png)  
+### ingresar
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20Inicio%20de%20sesion/Ingresar.png)  
+### cerrar
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20Inicio%20de%20sesion/Cerrar.png)  
+### inicio_sesion
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20Inicio%20de%20sesion/Inicio_De_sesion.png)   
+## Menú
+Abre un menú principal, donde puedes escoger entre las distintas funcionalidades del programa, agregar, modificar, eliminar, mostrar y migrar. 
+Diagrama de Menú  
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagrmas%20de%20Menu_Sql_server/General_Menu.png)    
+Estas funcion es compuesta por una funcion, esta funciones era:  
+### sqls
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagrmas%20de%20Menu_Sql_server/sqls.png)  
+## Mostrar
+Primero seleccionas que tabla quieres ver y te muestra todos sus detalles.     
+Diagrama de Mostrar:  
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Show/General_Show.png)
+Estas funcion es compuesta por tres funciones, estas funciones son:  
+### confirmacion
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Show/Confirmacion.jpeg)   
+### final_show
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Show/Final_show.jpeg)   
+### show
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Show/Show.jpeg)   
+## Agregar
+Seleccionas la tabla en la cual quieres agregar valores, y te muestra los valores que debes agregar para aumentar una fila.  
+Diagrama de Agregar
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramsa%20de%20la%20funcion%20add/Add%20general.drawio)  
+Estas funcion es compuesta por seis funciones, estas funciones son:  
+### obtener_nombres_columnas
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramsa%20de%20la%20funcion%20add/Ontenernombres_columnas.png)  
+### insertar_registro
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramsa%20de%20la%20funcion%20add/insertar_registro.png)  
+### añadiendo
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramsa%20de%20la%20funcion%20add/Anadiendo.png)  
+### confirmacion
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramsa%20de%20la%20funcion%20add/Confirmacion.png)  
+### add
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramsa%20de%20la%20funcion%20add/Add.png)  
+## Eliminar
+Seleccionas de que tabla quieres eliminar, y luego seleccionas la fila que quieres eliminar.  
+Diagrama de Eliminar
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Del/Diagrma%20general%20del.png)  
+Estas funcion es compuesta por cinco funciones, estas funciones son:  
+### obtener_nombres_columnas
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Del/Obtener_Nombre_Columnas.png)  
+### eliminar_fila
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Del/Eliminar_Fila.png)  
+### eliminacion
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Del/Eliminacion.png)  
+### confirmacion
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Del/Confrmacion.png)  
+### delete
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Del/delete.png)  
+## Modificar
+Seleccionas la tabla, y te muestra sus filas, seleccionas la que quieras modificar, y posteriormente te abre un menú donde puedes modificar sus valores.  
+Estas funcion es compuesta por seis funciones, estas funciones son:
+### obtener_nombres_columnas
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Modificar/Extraer_Nombres_de_Columnas.jpeg)  
+### obtener_registros
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Modificar/Obtencion_registros.jpeg)
+### actualizar_fila
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Modificar/Actualizar_tabla.jpeg)  
+### mostrar_detalles
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Modificar/Mostras_detalle.jpeg)  
+### modificar
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Modificar/Modificar.jpeg)  
+### confirmacion
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Modificar/Confimar.jpeg)   
+## Migración. 
+Esta función consiste en base a la base de datos la la cual ha sido introducida al iniciar el programa está procede a migrarse dependiendo de en qué base de datos esté si está en SQL server se migrará a MySQL en caso de estar en una base de datos que se encuentra en MySQL se migrará SQL server.  
+Diagrama de Migración.
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Migracion/Migracion%20general.png)  
+Estas funcion es compuesta por 10 funciones, estas funciones son:
+### connect_to_mysql_without_database
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Migracion/connect_to_mysql_without_database.png)  
+### connect_to_mysql_with_database
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Migracion/connect_to_mysql_with_database.png)  
+### fetch_data_from_sql_server
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Migracion/fetch_data_from_sql_server.png)  
+### create_mysql_table
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Migracion/create_mysql_table.png)  
+### insert_data_into_mysql
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Migracion/insert_data_into_mysql.png)    
+### migrate_data
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Migracion/migrate_data.png)  
+### fetch_tables_names_from_sql_server
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Migracion/fetch_tables_names_from_sql_server.png)  
+### on_submit
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Migracion/on_submit.png)  
+### mostrar_password
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Migracion/mostrar_password.png)  
+### migrar
+![](https://github.com/Andress-Mallea/Proyecto-final-BD-Progra/blob/main/Diagrams%20de%20flujo/Diagrams_de_flujo_Actualizados/Diagramas%20de%20la%20funcion%20Migracion/migrar.png)   
+# Importante  
+## Si existe errores al ejecutar, mande la carpeta de proyecto progra 1 al escritorio.  
+

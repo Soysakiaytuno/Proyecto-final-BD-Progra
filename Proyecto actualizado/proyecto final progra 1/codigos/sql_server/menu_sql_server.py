@@ -1,6 +1,7 @@
 from tkinter import *
 import codigos.sql_server.BD_sql_server as BD_sql_server 
 import codigos.musica as musica
+#Creamos una funcion que crea una ventana con cuatro botone ligasos a los distintos metodos de la clase DatabaseManager
 def sqls():
     main = Tk()
     musica.music("codigos/assets/sqlserver.ogg")
