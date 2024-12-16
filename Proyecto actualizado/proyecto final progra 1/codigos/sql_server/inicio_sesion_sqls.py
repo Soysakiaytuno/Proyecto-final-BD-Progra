@@ -4,7 +4,7 @@ import codigos.sql_server.BD_sql_server as BD_sql_server
 import codigos.sql_server.menu_sql_server as menu_sql_server
 from playsound import playsound
 import codigos.musica as musica
-
+from codigos.sql_server.cancelar import cerrar
 sonido = 1
 def sonidito():
     #Definimos la variable global para que cada que llame a la funcion intercambie de sonido
@@ -40,8 +40,7 @@ def ingresar(main_menu, driver, server, database, start_sqls):
         #Abrimos el menu para la interracion con bases de datos de SQL Server
         menu_sql_server.sqls()
 
-def cerrar(start_sqls):
-    start_sqls.destroy()
+
 
 def inicio_sesion(main_menu):
     #raiz principal

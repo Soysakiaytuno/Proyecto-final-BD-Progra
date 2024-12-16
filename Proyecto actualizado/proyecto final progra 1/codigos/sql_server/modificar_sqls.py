@@ -1,21 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import pyodbc
-
-# Función para obtener nombres de columnas de la tabla, excluyendo ModifiedDate
-def obtener_nombres_columnas(mydb, table_name):
-    cursor = mydb.cursor()
-    #Por medio de un cursor ejecutamos un quary que nos da el nombre de las columnas
-    cursor.execute(f"""
-        SELECT COLUMN_NAME 
-        FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE TABLE_NAME = '{table_name}' AND COLUMN_NAME != 'ModifiedDate';
-    """)
-    #Guardamos los Datos obtenidos en una variable vacia
-    columnas = cursor.fetchall()
-    #Guardamos en una variable array los nombres de las columnas de la tabla seleccionada
-    nombres_columnas = [columna[0] for columna in columnas]
-    return nombres_columnas
+from codigo.sql_server.obtener_nombres_columnas import obtener_nombres_columnas
 
 # Función para obtener registros de la tabla, excluyendo ModifiedDate
 def obtener_registros(mydb, table_name):

@@ -1,18 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import mysql.connector
-
-# Función para obtener nombres de columnas de la tabla, excluyendo ModifiedDate
-def obtener_nombres_columnas(mydb, table_name):
-    cursor = mydb.cursor()
-    cursor.execute(f"""
-        SELECT COLUMN_NAME 
-        FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '{table_name}' AND COLUMN_NAME != 'ModifiedDate';
-    """)
-    columnas = cursor.fetchall()
-    nombres_columnas = [columna[0] for columna in columnas]
-    return nombres_columnas
+from codigos.my_sql.obtener_nombres_columnas import obtener_nombres_columnas
 
 # Función para insertar un registro
 def insertar_registro(entries, columnas, table_name, mydb, the_show):
