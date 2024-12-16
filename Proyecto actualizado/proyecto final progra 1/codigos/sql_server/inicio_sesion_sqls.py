@@ -15,24 +15,29 @@ def sonidito():
     else:
         playsound("codigos/assets/Kuru_kuru_sound.wav")
         sonido = 1
-
+#Esta funcion conecta con la base de datos de sql server
 def conectar(server, driver, database):
+    #Utilizamos el try para en caso de tener un error parar la ejecucion y mostrar un ventana emergente que informe al ususario del error
     try:
+        #Nos conectamos a la base de datos indicada por los datos introducidos por el usuario
         BD_sql_server.db_manager.conection(server, driver, database)  # Llamar a la función
     except Exception as ex:
         messagebox.showerror("ERROR", f"No se pudo conectar con la base de datos.\n{ex}")
-
+#Esta Funcion transmite los datos introducidos por el usuario y la conecta con la base de datos cerrando la ventana y abriendo otra
 def ingresar(main_menu, driver, server, database, start_sqls):
     if driver.get() == '' or server.get() == '' or database.get() == '':
         messagebox.showwarning("ERROR", "Llena los datos antes de ingresar")
     else:
+        #Obtenenmos los datos de la clase DatabaseManager y los guardamos en variables
         str_driver = driver.get()
         str_server = server.get()
         str_database = database.get()
         conectar(str_server, str_driver, str_database)
+        #Cerramos la ventana de main menu y paramos la musica que sonaba en esta
         start_sqls.destroy()
         main_menu.destroy()
         musica.detenermusica()
+        #Abrimos el menu para la interracion con bases de datos de SQL Server
         menu_sql_server.sqls()
 
 def cerrar(start_sqls):
