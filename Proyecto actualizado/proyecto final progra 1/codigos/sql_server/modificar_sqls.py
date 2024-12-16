@@ -2,36 +2,8 @@ from tkinter import *
 from tkinter import messagebox
 import pyodbc
 from codigo.sql_server.obtener_nombres_columnas import obtener_nombres_columnas
-
-# Función para obtener registros de la tabla, excluyendo ModifiedDate
-def obtener_registros(mydb, table_name):
-    cursor = mydb.cursor()
-    #Guardamos el nombre de las columans obtenidos con la funcion "obtener_nombres_columnas" dentro de una variable vacia
-    columnas = obtener_nombres_columnas(mydb, table_name)
-    columnas_str = ', '.join([f"[{columna}]" for columna in columnas])
-    cursor.execute(f"SELECT {columnas_str} FROM {table_name};")
-    #Obtenemos los datos de la tabla selecionada y los guardamos en una variable
-    registros = cursor.fetchall()
-    return registros, columnas
-
-# Función para actualizar un registro
-def actualizar_fila(var, entries, columnas, table_name, id_column, mydb, the_show):
-    fila_id = var.get()
-    if fila_id is not None:
-        try:
-            valores = [entries[col].get() for col in columnas]
-            set_clause = ', '.join([f"[{col}] = ?" for col in columnas] + ["[ModifiedDate] = CAST(GETDATE() AS date)"])
-            query = f"UPDATE {table_name} SET {set_clause} WHERE [{id_column}] = ?"
-            valores.append(fila_id)
-            cursor = mydb.cursor()
-            cursor.execute(query, valores)
-            mydb.commit()
-            messagebox.showinfo("Éxito", "Registro actualizado exitosamente")
-            the_show.destroy()
-        except Exception as ex:
-            messagebox.showerror("ERROR", f"El error es: \n{ex}")
-    else:
-        messagebox.showerror("ERROR", "Seleccione una fila para actualizar")
+from codigo.sql_server.obtener_registros_Modificar import obtener_registros
+from codigo.sql_server.actualizar_fila import actualizar_fila
 
 # Función para mostrar detalles en Entry widgets
 def mostrar_detalles(record, columnas, entries, scrollable_frame, records):

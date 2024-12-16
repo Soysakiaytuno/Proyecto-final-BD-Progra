@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import pyodbc
 from codigos.sql_server.obtener_nombres_columnas import obtener_nombres_columnas
-
+from codigos.sql_server.cancelar import cerrar as cancelar
 # Función para insertar un registro
 def insertar_registro(entries, columnas, table_name, mydb, the_show):
     #Guardamos los datos introducidos por el usuario en una variable
@@ -26,9 +26,6 @@ def insertar_registro(entries, columnas, table_name, mydb, the_show):
     except Exception as ex:
         messagebox.showerror("ERROR", f"El error es: \n{ex}")
 
-# Función para cancelar y cerrar la ventana
-def cancelar(the_show):
-    the_show.destroy()
 
 # Función para mostrar la ventana y añadir un registro
 def añadiendo(mydb, table_name):
